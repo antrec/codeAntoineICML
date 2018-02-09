@@ -49,10 +49,14 @@ switch(NUMERO_FETICHE)
             save(fn,'Zs','Ss','elTimes','Z');
 
     case(3)
+            bd = floor(n/10);
+            dh = bd;
+            nOutLim = floor(1/2 * (n + 1 - bd));
+
             S = bandDiagOutSimMatrix(n, bd, nOutLim);
             % (Observed) matrix with duplications
-            sz_ratio = 0.5;
-            dupl_prop = 0.8;
+%             sz_ratio = 0.5;
+%             dupl_prop = 0.8;
             [A, Z, c] = gen_dupl_mat(S, sz_ratio, dupl_prop);
 %             optSD = [];
 
@@ -61,6 +65,9 @@ switch(NUMERO_FETICHE)
             save(fn,'Zs','Ss','elTimes','Z');
     
     case(4)
+            bd = floor(n/10);
+            dh = bd;
+            nOutLim = floor(1/2 * (n + 1 - bd));
             S = bandDiagOutSimMatrix(n, bd, 2*nOutLim);
             % (Observed) matrix with duplications
             [A, Z, c] = gen_dupl_mat(S, sz_ratio, dupl_prop);
