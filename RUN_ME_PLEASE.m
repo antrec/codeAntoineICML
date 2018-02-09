@@ -9,12 +9,19 @@ rng(1);
 nSim=1;
 for iSim=1:nSim
         n = floor(100/sz_ratio);
+        
+        
         for dupl_prop = [0.8, 0.3]
             for sparsprop = [0.2, 1]
             rng(iSim);
             % Generate (ground truth) similarity matrix
 %             n = 100;
-
+            SDopts= [];
+            SDopts.Niter = 50;
+            optProj = [];
+            optProj.sparsprop = sparsprop;
+            SDopts.optProj = optProj;
+            dh = n;
 switch(NUMERO_FETICHE)
     case(1)
             noise=0.0;
@@ -23,12 +30,6 @@ switch(NUMERO_FETICHE)
 
             % (Observed) matrix with duplications
             [A, Z, c] = gen_dupl_mat(S, sz_ratio, dupl_prop);
-            SDopts= [];
-            SDopts.Niter = 50;
-            optProj = [];
-            optProj.sparsprop = sparsprop;
-            SDopts.optProj = optProj;
-            dh = n;
 
             [Zs,Ss, elTimes] = testAllMethodsDupli(A, c, dh, SDopts);
             fn = sprintf('exp1SerDuplSimu_%d_szr%d_dp%d_sparsprop%d.mat',iSim,10*sz_ratio,10*dupl_prop, 10*sparsprop);
@@ -41,7 +42,7 @@ switch(NUMERO_FETICHE)
             % S = full(gen_diag_plus_out_sim(n, floor(n/10), 0.0));
             % (Observed) matrix with duplications
             [A, Z, c] = gen_dupl_mat(S, sz_ratio, dupl_prop);
-            optSD = [];
+%             optSD = [];
 
             [Zs,Ss, elTimes] = testAllMethodsDupli(A, c, dh, SDopts);
             fn = sprintf('exp2SerDuplSimu_%d_szr%d_dp%d_sparsprop%d.mat',iSim,10*sz_ratio,10*dupl_prop, 10*sparsprop);
@@ -53,7 +54,7 @@ switch(NUMERO_FETICHE)
             sz_ratio = 0.5;
             dupl_prop = 0.8;
             [A, Z, c] = gen_dupl_mat(S, sz_ratio, dupl_prop);
-            optSD = [];
+%             optSD = [];
 
             [Zs,Ss, elTimes] = testAllMethodsDupli(A, c, dh, SDopts);
             fn = sprintf('exp3SerDuplSimu_%d_szr%d_dp%d_sparsprop%d.mat',iSim,10*sz_ratio,10*dupl_prop, 10*sparsprop);
@@ -63,7 +64,7 @@ switch(NUMERO_FETICHE)
             S = bandDiagOutSimMatrix(n, bd, 2*nOutLim);
             % (Observed) matrix with duplications
             [A, Z, c] = gen_dupl_mat(S, sz_ratio, dupl_prop);
-            optSD = [];
+%             optSD = [];
 
             [Zs,Ss, elTimes] = testAllMethodsDupli(A, c, dh, SDopts);
             fn = sprintf('exp4SerDuplSimuSimu_%d_szr%d_dp%d_sparsprop%d.mat',iSim,10*sz_ratio,10*dupl_prop, 10*sparsprop);
