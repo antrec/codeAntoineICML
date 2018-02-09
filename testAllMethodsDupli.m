@@ -195,17 +195,17 @@ Ss = setfield(Ss, methodName, St);
 % Zs = setfield(Zs,methodName,Zt);
 % Ss = setfield(Ss, methodName, St);
 
-methodName = 'AFWTiebreakHuber';
-iMethod = namesToIndex(methodName);
-opts = methodOpts{iMethod};
-t = clock;
-rsfh = @(M) permAwayFrankWolfe(M, opts);
-[Zt, St] = seriationDuplialtProj(A, c, rsfh, SDopts);
-et = etime(clock, t);
-fprintf('spectral computed in %1.2es',et);
-elTimes = setfield(elTimes,methodName,et);
-Zs = setfield(Zs,methodName,Zt);
-Ss = setfield(Ss, methodName, St);
+% methodName = 'AFWTiebreakHuber';
+% iMethod = namesToIndex(methodName);
+% opts = methodOpts{iMethod};
+% t = clock;
+% rsfh = @(M) permAwayFrankWolfe(M, opts);
+% [Zt, St] = seriationDuplialtProj(A, c, rsfh, SDopts);
+% et = etime(clock, t);
+% fprintf('spectral computed in %1.2es',et);
+% elTimes = setfield(elTimes,methodName,et);
+% Zs = setfield(Zs,methodName,Zt);
+% Ss = setfield(Ss, methodName, St);
 
 % 
 % methodName = 'FAQ2SUM';
@@ -292,17 +292,17 @@ Ss = setfield(Ss, methodName, St);
 % Zs = setfield(Zs,methodName,Zt);
 % Ss = setfield(Ss, methodName, St);
 
-methodName = 'UnconsHuber';
-iMethod = namesToIndex(methodName);
-opts = methodOpts{iMethod};
-t = clock;
-rsfh = @(M) unconsPermOpt(M, opts);
-[Zt, St] = seriationDuplialtProj(A, c, rsfh, SDopts);
-et = etime(clock, t);
-fprintf('spectral computed in %1.2es',et);
-elTimes = setfield(elTimes,methodName,et);
-Zs = setfield(Zs,methodName,Zt);
-Ss = setfield(Ss, methodName, St);
+% methodName = 'UnconsHuber';
+% iMethod = namesToIndex(methodName);
+% opts = methodOpts{iMethod};
+% t = clock;
+% rsfh = @(M) unconsPermOpt(M, opts);
+% [Zt, St] = seriationDuplialtProj(A, c, rsfh, SDopts);
+% et = etime(clock, t);
+% fprintf('spectral computed in %1.2es',et);
+% elTimes = setfield(elTimes,methodName,et);
+% Zs = setfield(Zs,methodName,Zt);
+% Ss = setfield(Ss, methodName, St);
 
 % methodName = 'Manopt2SUM';
 % iMethod = namesToIndex(methodName);
@@ -316,17 +316,17 @@ Ss = setfield(Ss, methodName, St);
 % Zs = setfield(Zs,methodName,Zt);
 % Ss = setfield(Ss, methodName, St);
 
-methodName = 'ManoptHuber';
-iMethod = namesToIndex(methodName);
-opts = methodOpts{iMethod};
-t = clock;
-rsfh = @(M) permManOpt(M, opts);
-[Zt, St] = seriationDuplialtProj(A, c, rsfh, SDopts);
-et = etime(clock, t);
-fprintf('spectral computed in %1.2es',et);
-elTimes = setfield(elTimes,methodName,et);
-Zs = setfield(Zs,methodName,Zt);
-Ss = setfield(Ss, methodName, St);
+% methodName = 'ManoptHuber';
+% iMethod = namesToIndex(methodName);
+% opts = methodOpts{iMethod};
+% t = clock;
+% rsfh = @(M) permManOpt(M, opts);
+% [Zt, St] = seriationDuplialtProj(A, c, rsfh, SDopts);
+% et = etime(clock, t);
+% fprintf('spectral computed in %1.2es',et);
+% elTimes = setfield(elTimes,methodName,et);
+% Zs = setfield(Zs,methodName,Zt);
+% Ss = setfield(Ss, methodName, St);
 
 
 end
