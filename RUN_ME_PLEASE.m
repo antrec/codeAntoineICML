@@ -1,4 +1,4 @@
-function [] = RUN_ME_PLEASE(NUMERO_FETICHE)
+function [] = RUN_ME_PLEASE(NUMERO_FETICHE, sz_ratio)
 % Il faut faire tourner ca avec NUMERO_FETICHE=1,2,3,4
 
 addpath(genpath(pwd));
@@ -8,7 +8,6 @@ rng(1);
 % NUMERO_FETICHE=1; 
 nSim=1;
 for iSim=1:nSim
-    for sz_ratio=[0.5, 0.8]
         n = floor(100/sz_ratio);
         for dupl_prop = [0.8, 0.3]
             for sparsprop = [0.2, 1]
@@ -72,7 +71,6 @@ switch(NUMERO_FETICHE)
 end
             end
         end
-    end
 end
 
 end
