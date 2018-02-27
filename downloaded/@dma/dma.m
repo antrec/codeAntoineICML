@@ -2,7 +2,7 @@
 %Includes various algorithms, utilities and measures for one-mode and two-mode seriation,
 %and processing of permutation information
 %
-%This is version: ver.2.9.2 (24-01-2018)
+%This is version: ver.2.9.4 (10-02-2018)
 
 %JY Goulermas, 2010
 
@@ -23,7 +23,7 @@ classdef dma
     tsp_args      = {};    %'starts' number of path start attempts in the heuristic solver, 'method' for 'heuristic' or 'concorde'
     qap_args      = {};    %'method' for 'sa' 'lopi','fw','fa','pso',pso2', or 'ps'. 'max_iters' for iterations. 'W' for a minimising seriation template.
     spectral_args = {};    %'method' is the name of the method, 'ext_perm' an external permutation vector, 'ext_mix' its mixture coefficient
-    gncr_args     = {};    %'mu_unit' the mu parameter, 'beta' the continuation rate
+    gncr_args     = {};    %'method' can be 'twosum' or 'pshuber', 'mu_unit' the mu parameter, 'gamma' the continuation rate, 'delta' for pshuber
     ga_args       = {};    %'objective' is one of: 'tsp', 'qap', era, arc', etc., W is the template for the 'qap' case; see corresponding function for more
     arsa_args     = {};    %simulated annealing method (see function for parameters)
     test1_args    = {};    %for testing - do NOT use!

@@ -1,13 +1,15 @@
-function [perms, huberscores, twosumscores, elTimes] = testAllMethods(A, dh)
+function [perms, huberscores, twosumscores, dist2Rmats, elTimes] = testAllMethods(A, dh)
 
 % Initialize variables to store results
 elTimes = [];
 perms = [];
 huberscores = [];
 twosumscores = [];
+dist2Rmats = [];
 
 huberh = @(x) huberSUM(x, A, dh);
 twosumh = @(x) two_SUM(x, A);
+getDist2R = @(p) dist2R(A(p,p));
 
 % Run spectral to initialize other methods
 % Spectral
@@ -24,8 +26,10 @@ elTimes = setfield(elTimes,methodName,et);
 perms = setfield(perms,methodName,perm);
 hubscore = huberh(perm);
 twoscore = twosumh(perm);
+thisDist2R = getDist2R(perm);
 huberscores = setfield(huberscores,methodName,hubscore);
 twosumscores = setfield(twosumscores,methodName,twoscore);
+dist2Rmats = setfield(dist2Rmats, methodName, thisDist2R);
 % subplot(2,3,1); imagesc(A(p0,p0)); title('spectral'); pause(1);
 p0 = perm;
 %
@@ -37,6 +41,15 @@ thismethodopts = [];
 nMethods = nMethods + 1;
 methodNames{nMethods} = thismethodname;
 methodOpts{nMethods} = thismethodopts;
+
+thismethodname = 'HGnCR';
+thismethodopts = {'method','pshuber','delta'};
+thismethodopts{length(thismethodopts)+1}= dh;
+nMethods = nMethods + 1;
+methodNames{nMethods} = thismethodname;
+methodOpts{nMethods} = thismethodopts;
+
+
 
 thismethodname = 'HuberEtaTrick';
 thismethodopts = [];
@@ -169,9 +182,25 @@ elTimes = setfield(elTimes,methodName,et);
 perms = setfield(perms,methodName,perm);
 hubscore = huberh(perm);
 twoscore = twosumh(perm);
+thisDist2R = getDist2R(perm);
 huberscores = setfield(huberscores,methodName,hubscore);
 twosumscores = setfield(twosumscores,methodName,twoscore);
+dist2Rmats = setfield(dist2Rmats, methodName, thisDist2R);
 
+methodName = 'HGnCR';
+iMethod = namesToIndex(methodName);
+opts = methodOpts{iMethod};
+t = clock;
+perm = dma.gncr(-A, opts{:});
+et = etime(clock, t);
+elTimes = setfield(elTimes,methodName,et);
+perms = setfield(perms,methodName,perm);
+hubscore = huberh(perm);
+twoscore = twosumh(perm);
+thisDist2R = getDist2R(perm);
+huberscores = setfield(huberscores,methodName,hubscore);
+twosumscores = setfield(twosumscores,methodName,twoscore);
+dist2Rmats = setfield(dist2Rmats, methodName, thisDist2R);
 
 methodName = 'HuberEtaTrick';
 iMethod = namesToIndex(methodName);
@@ -183,8 +212,10 @@ elTimes = setfield(elTimes,methodName,et);
 perms = setfield(perms,methodName,perm);
 hubscore = huberh(perm);
 twoscore = twosumh(perm);
+thisDist2R = getDist2R(perm);
 huberscores = setfield(huberscores,methodName,hubscore);
 twosumscores = setfield(twosumscores,methodName,twoscore);
+dist2Rmats = setfield(dist2Rmats, methodName, thisDist2R);
 
 
 methodName = 'AFWTiebreak2SUM';
@@ -197,8 +228,10 @@ elTimes = setfield(elTimes,methodName,et);
 perms = setfield(perms,methodName,perm);
 hubscore = huberh(perm);
 twoscore = twosumh(perm);
+thisDist2R = getDist2R(perm);
 huberscores = setfield(huberscores,methodName,hubscore);
 twosumscores = setfield(twosumscores,methodName,twoscore);
+dist2Rmats = setfield(dist2Rmats, methodName, thisDist2R);
 
 methodName = 'AFWTiebreakHuber';
 iMethod = namesToIndex(methodName);
@@ -210,8 +243,10 @@ elTimes = setfield(elTimes,methodName,et);
 perms = setfield(perms,methodName,perm);
 hubscore = huberh(perm);
 twoscore = twosumh(perm);
+thisDist2R = getDist2R(perm);
 huberscores = setfield(huberscores,methodName,hubscore);
 twosumscores = setfield(twosumscores,methodName,twoscore);
+dist2Rmats = setfield(dist2Rmats, methodName, thisDist2R);
 
 
 methodName = 'FAQ2SUM';
@@ -224,8 +259,10 @@ elTimes = setfield(elTimes,methodName,et);
 perms = setfield(perms,methodName,perm);
 hubscore = huberh(perm);
 twoscore = twosumh(perm);
+thisDist2R = getDist2R(perm);
 huberscores = setfield(huberscores,methodName,hubscore);
 twosumscores = setfield(twosumscores,methodName,twoscore);
+dist2Rmats = setfield(dist2Rmats, methodName, thisDist2R);
 
 methodName = 'FAQHuber';
 iMethod = namesToIndex(methodName);
@@ -250,8 +287,10 @@ elTimes = setfield(elTimes,methodName,et);
 perms = setfield(perms,methodName,perm);
 hubscore = huberh(perm);
 twoscore = twosumh(perm);
+thisDist2R = getDist2R(perm);
 huberscores = setfield(huberscores,methodName,hubscore);
 twosumscores = setfield(twosumscores,methodName,twoscore);
+dist2Rmats = setfield(dist2Rmats, methodName, thisDist2R);
 
 methodName = 'LWCD2SUM';
 iMethod = namesToIndex(methodName);
@@ -263,8 +302,10 @@ elTimes = setfield(elTimes,methodName,et);
 perms = setfield(perms,methodName,perm);
 hubscore = huberh(perm);
 twoscore = twosumh(perm);
+thisDist2R = getDist2R(perm);
 huberscores = setfield(huberscores,methodName,hubscore);
 twosumscores = setfield(twosumscores,methodName,twoscore);
+dist2Rmats = setfield(dist2Rmats, methodName, thisDist2R);
 
 methodName = 'LWCDHuber';
 iMethod = namesToIndex(methodName);
@@ -276,8 +317,10 @@ elTimes = setfield(elTimes,methodName,et);
 perms = setfield(perms,methodName,perm);
 hubscore = huberh(perm);
 twoscore = twosumh(perm);
+thisDist2R = getDist2R(perm);
 huberscores = setfield(huberscores,methodName,hubscore);
 twosumscores = setfield(twosumscores,methodName,twoscore);
+dist2Rmats = setfield(dist2Rmats, methodName, thisDist2R);
 
 methodName = 'LWCDR2SUM';
 iMethod = namesToIndex(methodName);
@@ -289,8 +332,10 @@ elTimes = setfield(elTimes,methodName,et);
 perms = setfield(perms,methodName,perm);
 hubscore = huberh(perm);
 twoscore = twosumh(perm);
+thisDist2R = getDist2R(perm);
 huberscores = setfield(huberscores,methodName,hubscore);
 twosumscores = setfield(twosumscores,methodName,twoscore);
+dist2Rmats = setfield(dist2Rmats, methodName, thisDist2R);
 
 methodName = 'Uncons2SUM';
 iMethod = namesToIndex(methodName);
@@ -302,8 +347,10 @@ elTimes = setfield(elTimes,methodName,et);
 perms = setfield(perms,methodName,perm);
 hubscore = huberh(perm);
 twoscore = twosumh(perm);
+thisDist2R = getDist2R(perm);
 huberscores = setfield(huberscores,methodName,hubscore);
 twosumscores = setfield(twosumscores,methodName,twoscore);
+dist2Rmats = setfield(dist2Rmats, methodName, thisDist2R);
 
 methodName = 'UnconsHuber';
 iMethod = namesToIndex(methodName);
@@ -315,8 +362,10 @@ elTimes = setfield(elTimes,methodName,et);
 perms = setfield(perms,methodName,perm);
 hubscore = huberh(perm);
 twoscore = twosumh(perm);
+thisDist2R = getDist2R(perm);
 huberscores = setfield(huberscores,methodName,hubscore);
 twosumscores = setfield(twosumscores,methodName,twoscore);
+dist2Rmats = setfield(dist2Rmats, methodName, thisDist2R);
 
 methodName = 'Manopt2SUM';
 iMethod = namesToIndex(methodName);
@@ -328,8 +377,10 @@ elTimes = setfield(elTimes,methodName,et);
 perms = setfield(perms,methodName,perm);
 hubscore = huberh(perm);
 twoscore = twosumh(perm);
+thisDist2R = getDist2R(perm);
 huberscores = setfield(huberscores,methodName,hubscore);
 twosumscores = setfield(twosumscores,methodName,twoscore);
+dist2Rmats = setfield(dist2Rmats, methodName, thisDist2R);
 
 methodName = 'ManoptHuber';
 iMethod = namesToIndex(methodName);
@@ -341,8 +392,10 @@ elTimes = setfield(elTimes,methodName,et);
 perms = setfield(perms,methodName,perm);
 hubscore = huberh(perm);
 twoscore = twosumh(perm);
+thisDist2R = getDist2R(perm);
 huberscores = setfield(huberscores,methodName,hubscore);
 twosumscores = setfield(twosumscores,methodName,twoscore);
+dist2Rmats = setfield(dist2Rmats, methodName, thisDist2R);
 
 
 end

@@ -1,6 +1,7 @@
 function [conComp,nbComp,singles]=conn_comp(S)
 % [labels, nbComp] = graph_conn_comp(S);%    conncomp(S);
-[labels, nbComp] = conncomp(S);
+[nbComp, labels] = graphconncomp(S);
+% [labels, nbComp] = conncomp(S);
 
 conComp=cell(nbComp,1);
 lengthComp=zeros(1,nbComp);

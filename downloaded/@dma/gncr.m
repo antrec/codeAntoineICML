@@ -1,101 +1,37 @@
-%From paper: A Graduated Non-Convexity Relaxation for Large Scale Seriation.
-%            X. Evangelopoulos, A.J. Brockmeier, T. Mu and J.Y. Goulermas, SIAM Data Mining, 2017.
+%From paper: Approximation Methods for Large Scale Object Sequencing.
+%            X. Evangelopoulos, A.J. Brockmeier, T. Mu and J.Y. Goulermas,
+%            (under submission)
+%Input:
+%   D      : an nxn symmetric dissimilarity matrix
+%   method : 'twosum' to solve the 2-SUM and 'pshuber' to solve the Huberized 1-SUM
+%   perm   : final permutation
+%   details: struct with final 2-SUM/1-SUM scores, etc.
 %
-%D : an nxn symmetric dissimilarity matrix
-%mu_init : initial regularization parameter (\mu_1 in the paper)
-%beta : continuation rate (>1)
-%gnc_perm : final permutation
-%two_sum : final 2-SUM score
-%
-%X. Evangelopoulos, 2016.
-
-function [perm, details] = gncr (D,varargin)
-
-A = max(max(D)) - D; %convert to similarity for this method
-n = size(A,1);
-
-%Laplacian
-lapfun = @(x) (diag(sum(x,2)) - x);
-L_A = lapfun(A);
-
-%lambda values to control convex and concave regularization
-lambda2 = eigs(L_A,2,'sa');
-lambda2 = max(lambda2);
-lambdaN = eigs(L_A,1,'la');
+%J. Y. Goulermas & X. Evangelopoulos, 2018.
 
 
-%default parameters
-mu_init = lambda2;
-beta = 1.05;
+function [perm, details] = gncr(D, varargin)
 
-if mod(length(varargin),2)
-    error('dma:gncr', 'missing parameters')
+  im = 1;
+  while im <= length(varargin)-1 && ~strcmpi(varargin{im}, 'method')
+    im = im + 1;
+  end
+
+  if im > length(varargin)-1
+    error('dma:gncr', 'missing method specifier')
+  else
+    method            = varargin{im+1};
+    varargin(im:im+1) = [];
+  end
+
+  switch lower(method)
+    case 'twosum'
+      [perm, details] = gncr_twosum(D, varargin{:});
+    case 'pshuber'
+      [perm, details] = gncr_pseudo_huber(D, varargin{:});        
+    otherwise
+        error('dma:gncr', 'unknown gncr type: %s', method )
+  end
+
 end
-
-for i = 1 : 2 : length(varargin) - 1
-    switch lower( varargin{i} )
-        case 'mu_init'
-            mu_init = varargin{i+1};
-        case 'beta'
-            beta = varargin{i+1};
-        otherwise
-            error('dma:gncr', 'unknown parameter: %s', varargin{i} )
-    end
-end
-
-e = (1:n)';
-nstep = 500; %number of FW steps
-H = eye(n) - (1/n)*ones(n); %centering matrix
-
-%Conditional Gradient approach
-perm = e;
-gperm = (e+(n+1)/2*ones(n,1))/2; %starting point
-mu = mu_init;
-
-while mu <= beta*lambdaN
-    for j = 1:nstep
-        
-        %compute conditional gradient & instead of lap do sort
-        [~,perm] = sort(L_A*gperm-mu*H*gperm,'descend');
-        [~,iperm] = sort(perm,1);
-        gperm_1 = iperm;
-        
-        %Line search
-        c1 = gperm_1'*(L_A-mu*H)*gperm_1;
-        c2 = gperm'*(L_A-mu*H)*gperm;
-        c3 = gperm'*(L_A-mu*H)*gperm_1;
-        
-        if c1+c2-2*c3 <= 0
-            alpha = 1;
-            
-            if c1 >= c2
-                break;
-            end
-        else
-            alpha = (c2-c3)./(c1+c2-2*c3);
-            alpha = max(0,min(1,alpha));
-            
-            %Convergence check
-            if alpha <= 1e-2
-                break;
-            end
-        end
-        
-        gperm = alpha*gperm_1+(1-alpha)*gperm;
-        
-        %get permutation of next step
-        [~,perm] = sort(gperm);
-        
-    end
     
-    %mu update
-    if mu == 0 %handle the case where mu_init == 0
-        mu = 0.01;
-    end
-    mu = mu*beta;
-    
-end
-details.two_sum = 2*e'*L_A(perm,perm)*e;
-end
-
-

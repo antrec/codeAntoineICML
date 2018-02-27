@@ -2,7 +2,7 @@ currentFolder = pwd;
 addpath(genpath(currentFolder));
 
 %%
-ns = [100, 200];
+ns = [100, 200, 500];
 nSimu = 50;
 iOuts = [1,2,5,10,15,20];
 
@@ -30,10 +30,10 @@ for n = ns
                 dh = find((nInDiags - nAll)>0, 1, 'first');
 
                 % Run all methods
-                [perms, huberscores, twosumscores, elTimes] = testAllMethods(A, dh);
+                [perms, huberscores, twosumscores, dist2Rmats, elTimes] = testAllMethods(A, dh);
 
                 % Save results
-                save(thisExpName, 'perms', 'huberscores', 'twosumscores', 'elTimes');
+                save(thisExpName, 'perms', 'huberscores', 'twosumscores', 'dist2Rmats', 'elTimes');
 
             end
 
