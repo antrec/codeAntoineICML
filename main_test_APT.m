@@ -1,6 +1,17 @@
 currentFolder = pwd;
 addpath(genpath(currentFolder));
 
+if ~exist('results','dir')
+    mkdir results
+end
+cd results
+
+
+if ~exist('rob_ser','dir')
+    mkdir rob_ser
+end
+cd rob_ser
+
 % ns = [100, 200, 500];
 % nSimu = 50;
 % iOuts = [1,2,5,10,15,20];
