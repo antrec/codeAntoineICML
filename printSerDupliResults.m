@@ -1,9 +1,9 @@
 function [] = printSerDupliResults(thisfileName, Zs, Ss, elTimes, Z)
 
 
-methods = 
+% methods = 
 
-[n,N] = size(Z)
+[n,N] = size(Z);
 if n >= N
     Z = Z';
 end
