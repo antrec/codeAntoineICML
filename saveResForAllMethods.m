@@ -6,6 +6,7 @@ function [done] = saveResForAllMethods(n, bd, iOut, iSimu)
 
     rng(iSimu);
     A = bandDiagOutSimMatrix(n, bd, nOut);
+    cd res;
     thisExpName = sprintf('simu_n%d_bd%d_iOut%d_kSim%d.mat', ...
         n,bd,iOut,iSimu);
 
