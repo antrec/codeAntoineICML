@@ -1,4 +1,4 @@
-function [f, df] = transfo2permhyperplane(U, y, f_handle)
+function [f, df] = transfo2permhyperplane2(U, y, f_handle)
 % y is on the unit sphere in R^{n-1}, it has an associated vector x
 % on the sphere of radius norm(randperm(n)) in R^{n}.
 
@@ -13,6 +13,6 @@ end
 % to make things easier let's add the constant to be in same hyperplane as
 % the permutahedron
 c = 1./2*(n+1)*ones(n,1); % center of the convex hull of permutation vectors.
-x = U*y*norm(U'*randperm(n)') + c;
+x = U*y + c;
 [f, df] = f_handle(x);
 df = U'*df;

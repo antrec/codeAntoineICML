@@ -18,6 +18,7 @@ if opts.addIter
 end
 useFid = opts.useFiedler;
 doPlot = opts.doPlot;
+maxNoDecrease = opts.maxNoDecrease;
 
 % Initialization
 bestscore = +inf;
@@ -35,6 +36,7 @@ else
     end
 end
 
+noDecreaseCpt = 0;
 
 for iter = 1:opts.Niter
 
@@ -42,7 +44,8 @@ for iter = 1:opts.Niter
 
         % Approximately solve sum A_ij*(1/eta_ij*(x_i - x_j)^2 + eta_ij)
         myA = sparse(is, js, vs./etas, n, n);
-        [myp, myx] = spectralOneCC(myA);
+        [mypi, myx] = spectralOneCC(myA);
+        [~,myp] = sort(mypi);
 
         % Update eta and compute objective
         if useFid
@@ -57,7 +60,8 @@ for iter = 1:opts.Niter
 
         % Approximately solve sum A_ij*(1/eta_ij*(x_i - x_j)^2 + eta_ij)
         myA = A./etas;
-        [myp, myx] = spectralOneCC(myA);
+        [mypi, myx] = spectralOneCC(myA);
+        [~,myp]=sort(mypi);
 
         % Update eta and compute objective
         if useFid
@@ -80,20 +84,27 @@ for iter = 1:opts.Niter
     fs(iter) = obj;
     if obj < bestscore
         bestscore = obj;
-        perm = myp;
+        perm = mypi;
+        noDecreaseCpt = 0;
+    else
+        noDecreaseCpt = noDecreaseCpt + 1;
+    end
+    
+    if noDecreaseCpt > maxNoDecrease
+        break;
     end
     
     % Plot
     if doPlot
         if issparse(A)
-            subplot(1,3,1); scatshowsp(A(myp,myp)); colorbar;
-            subplot(1,3,2); scatshowsp(sparse(is,js,etas,n,n)); colorbar;
+            subplot(1,2,1); spy(A(mypi,mypi)); colorbar;
+%             subplot(1,3,2); scatshowsp(sparse(is,js,etas,n,n)); colorbar;
         else
-            subplot(1,3,1); imagesc(A(myp,myp)); colorbar;
-            subplot(1,3,2); imagesc(etas); colorbar;
+            subplot(1,2,1); imagesc(A(mypi,mypi)); colorbar;
+%             subplot(1,2,2); imagesc(etas); colorbar;
         end
-        subplot(1,3,3); fs(1:iter,'-d');
-        title('it%d, score (best) : %1.2e (%1.2e)',iter, obj, bestscore);
+        subplot(1,2,2); plot(fs(1:iter),'-d');
+        title(sprintf('it%d, score (best) : %1.2e (%1.2e)',iter, obj, bestscore));
         pause(0.1);
     end
 
@@ -106,10 +117,11 @@ end
     options.doRegLap = false;
     options.dHuber = 1;
     options.useFiedler = false;
-    options.Niter = 15;
+    options.Niter = 30;
     options.addIter = true;
     options.addGamma = 0.5;
     options.doPlot = false;
+    options.maxNoDecrease = 10;
 
     end
 

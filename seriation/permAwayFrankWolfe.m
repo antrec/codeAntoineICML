@@ -258,7 +258,7 @@ end
     function h = hashing(permvec)
         % sequence is permutation vector
         % output is its conversion to a string
-        h = char(join(string(permvec)));
+        h = char(num2str(permvec));
     end
 
     function [step, fxx] = aLineSearch(funh, x, dx, g, step, bet, alf)

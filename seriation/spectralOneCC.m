@@ -46,9 +46,9 @@ function [perm, fiedler] = spectralOneCC(Ssub, doRegLap)
         [~,lambdamax] = eigs(L2,5,'lm');
         lambdamax = lambdamax(1,1);
         opts.tol=1.e-30;
-        opts.maxit=2500;
+        opts.maxit=4500;
         opts.v0=(1./sqrt(nSub))*ones(nSub,1);
-        [V2,eigval] = eigs(lambdamax*speye(nSub) - L2,6,'lm',opts);
+        [V2,eigval] = eigs(lambdamax*speye(nSub) - L2,2,'lm',opts);
 
         lambdadif = eigval(2,2);
         if lambdamax - lambdadif < 1.e-8
