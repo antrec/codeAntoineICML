@@ -1,4 +1,4 @@
-function [done] = saveResForAllMethods(n, bd, iOut, iSimu)
+function [done] = saveResForAllMethods(n, bd, iOut, iSimu, resdir)
     done = 0;
     
     nOutLim = floor(1/2 * (n + 1 - bd));        
@@ -6,9 +6,12 @@ function [done] = saveResForAllMethods(n, bd, iOut, iSimu)
 
     rng(iSimu);
     A = bandDiagOutSimMatrix(n, bd, nOut);
-    cd res;
-    thisExpName = sprintf('simu_n%d_bd%d_iOut%d_kSim%d.mat', ...
+    rp = randperm(n);
+    A = A(rp,rp);
+%     cd res;
+    thisExpName = sprintf('ONLYUNCONSANDFW_n%d_bd%d_iOut%d_kSim%d.mat', ...
         n,bd,iOut,iSimu);
+    thisExpName = strcat(resdir, '/', thisExpName);
 
     % Chose parameter dh according to number of non-zero elements of A
     nAll = floor(1/2 * nnz(A));
@@ -19,7 +22,7 @@ function [done] = saveResForAllMethods(n, bd, iOut, iSimu)
     [perms, huberscores, twosumscores, dist2Rmats, elTimes] = testAllMethods(A, dh);
 
     % Save results
-    save(thisExpName, 'perms', 'huberscores', 'twosumscores', 'dist2Rmats', 'elTimes');
+    save(thisExpName, 'perms', 'huberscores', 'twosumscores', 'dist2Rmats', 'elTimes', 'A', 'rp');
 
     pause(0.1);
     
