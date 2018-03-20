@@ -67,7 +67,8 @@ options = optimoptions('linprog','Algorithm','dual-simplex');%,'OptimalityTolera
 
 %     ub = [max(slt(:))*ones(ntri+n,1); ubval*ones(ntri+n,1)];
 ub = [max(ubs)*ones(1,2*ntri), ubs];
-xsol = linprog(bigf,biglineqmat,bigb, [], [], sparse(2*(ntri),1),ub, options);
+% xsol = linprog(bigf,biglineqmat,bigb, [], [], sparse(2*(ntri),1),ub, options);
+xsol = callLinprog(bigf,biglineqmat,bigb, [], [], sparse(2*(ntri),1),ub, options);
 %     xsol = linprog(bigf,biglineqmat,bigb, [], [], sparse(2*(ntri+n),1),[], options);
 % xsol = linprog(bigf,biglineqmat,bigb, [], [], sparse(2*(ntri+n),1),[]);
 

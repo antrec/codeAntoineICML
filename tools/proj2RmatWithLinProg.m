@@ -135,7 +135,8 @@ lineqmat = lineqmat*square2ltmat';
         % Add upper bound ?
         ub = [slt; ubval*ones(ntri,1)];
 %         ub = ubval*ones(2*ntri,1);
-        xsol = linprog(bigf,biglineqmat,bigb, [], [], sparse(2*(ntri),1),ub, options);
+%         xsol = linprog(bigf,biglineqmat,bigb, [], [], sparse(2*(ntri),1),ub, options);
+        xsol = callLinprog(bigf,biglineqmat,bigb, [], [], sparse(2*(ntri),1),ub, options);
 %         xsol = linprog(bigf,biglineqmat,bigb, [], [], sparse(2*(ntri),1),[], options);
 
         % Get back to matrix form
@@ -208,7 +209,9 @@ else
     options = optimoptions('linprog','Algorithm','dual-simplex');%,'OptimalityTolerance',1e-7);
     
     ub = [max(slt(:))*ones(ntri+n,1); ubval*ones(ntri+n,1)];
-    xsol = linprog(bigf,biglineqmat,bigb, [], [], sparse(2*(ntri),1),ub, options);
+%     xsol = linprog(bigf,biglineqmat,bigb, [], [], sparse(2*(ntri),1),ub, options);
+    xsol = callLinprog(bigf,biglineqmat,bigb, [], [], sparse(2*(ntri),1),ub, options);
+
 %     xsol = linprog(bigf,biglineqmat,bigb, [], [], sparse(2*(ntri+n),1),[], options);
     % xsol = linprog(bigf,biglineqmat,bigb, [], [], sparse(2*(ntri+n),1),[]);
 
