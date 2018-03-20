@@ -20,7 +20,7 @@ bsum = sum(bb);
 
 if aa > bsum
     myy = bb + 1/pp * (aa - bsum);
-else
+% else
 %     [sbvals,thisp] = sort(b, 'descend');
     bma = bb - (1./(1:pp)') .* (cumsum(bb) - aa);
     fneg = find(bma<0,1,'first');

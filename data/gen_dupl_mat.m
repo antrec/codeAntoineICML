@@ -12,6 +12,18 @@ dupl_idx = randperm(n, n_dupl);
 Z = sparse(1:n, 1:n, ones(1,n), N, n);
 rep_idx = dupl_idx(randi(n_dupl, 1, N-n));
 Z = Z + sparse(n+1:N, rep_idx, ones(1, N-n), N, n);
+
+rpN = randperm(N)';
+rpDupl = [(1:n), randi(n,1,N-n)];
+rpDupl = rpDupl(randperm(N)');
+% rpDupl = randi(n,1,N);
+Z = sparse(rpDupl, rpN, ones(1,N), n, N);
+Z = Z';
+
+    
+
+
+
 A = Z'*S*Z;
 c = Z'*ones(N, 1);
 

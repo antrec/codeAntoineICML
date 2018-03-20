@@ -40,6 +40,9 @@ opts_def.batchSize = nbnz;
 opts_def.softCons = false;
 opts_def.sparsprop = 1;
 opts_def.elnet = 0.5;
+opts_def.dh = n;
+opts_def.ub = inf;
+% opts_def.maxval = inf;
 if nargin == 3
     opts = opts_def;
 else
@@ -49,6 +52,8 @@ batchSize = opts.batchSize;
 softCons = opts.softCons;
 elnet = opts.elnet;
 sparsprop = opts.sparsprop;
+dh = opts.dh;
+ubval = opts.ub;
 
 Svec = S(:);
 
@@ -82,6 +87,12 @@ for nzi=1:nbnz
     kkk = max(kk, ll);
     lll = min(kk, ll);
     myinds = sub2ind([n n], kkk, lll);
+%     % OR KEEP ONLY VALUES IN A GIVEN BAND ?!
+%     inband = find(kkk-lll <= dh);
+%     if isempty(inband)
+%         [~,inband]=min(kkk-lll);
+%     end
+%     myinds = sub2ind([n n], kkk(inband), lll(inband));
     
     % Compute new values projected on constraints set
     ninds = length(myinds);
@@ -92,9 +103,19 @@ for nzi=1:nbnz
         newvals(myinds) = aij;%1e3;%bvals;
 %         continue
     else
-        sparam = min(ninds,max(2,floor(ninds*sparsprop)));
+        % Test something : have a target band-size for S
+        sparam = ninds;
+%         sparam = max(1,sum(kkk-lll <= dh));
+%         sparam = min(ninds,max(1,floor(ninds*sparsprop)));
+%         sparam = min(sparam, nnz(bvals));
+%         sparam = max(2,sparam);
+%         sparam = max(sparam, max(length(ks),length(ls)));
 %         sparam = ninds;
-        newvals(myinds) = projconssparse(bvals, aij, sparam);
+%         newvals(myinds) = projconssparse(bvals, aij, sparam);
+        thisopts = [];
+        thisopts.sparam = sparam;
+        thisopts.ub = ubval;
+        newvals(myinds) = projconssparse2(bvals,aij,thisopts);
 %         bsum = sum(bvals);
 %         if aij >= bsum
 %             newvals(myinds) = bvals + 1/ninds * (aij - bsum);

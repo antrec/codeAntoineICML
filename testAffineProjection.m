@@ -6,7 +6,7 @@ b = 1 + rand(p,1);
 b = sort(b, 'descend');
 b(end-5:end)=0;
 bsum = sum(b);
-a = 1.5*bsum;
+a = 1.2*bsum;
 elnet=0.3;
 % Run convex programming software to perform projection
 cvx_begin
@@ -17,9 +17,20 @@ cvx_begin
         y >= 0;
 cvx_end
 
-sparam = min(sparam, nnz(b));
+% Try weighted norm with CVX
+cvx_begin
+    variable yy(p);
+    minimize norm_largest(yy-b,1) + 0.8*norm_largest(yy-b,4) + 0.1*norm_largest(yy-b,p)
+    subject to
+    sum(yy) == a;
+    yy >= 0;
+cvx_end
+
+% sparam = min(sparam, nnz(b));
 myy = projconssparse(b,a,sparam);
-figure; plot(y,'r+'); hold on; plot(myy, 'kx'); hold on; plot(b,'o'); %hold on; plot(xslope,'gd');
+
+
+figure; plot(y,'r+'); hold on; plot(myy, 'kx'); hold on; plot(b,'o'); hold on; plot(yy,'gd');
 %%
 lambdas = 1./(1:p).^2;
 sumslope=-inf;
